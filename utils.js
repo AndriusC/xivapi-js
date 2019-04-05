@@ -10,12 +10,14 @@ const request = require('request-promise-native'),
 module.exports = {
 	//standard request function
 	req(path, params) {
-		if(params && typeof params.snake_case !== 'undefined')
-			params.snake_case = params.snake_case ? 1 : 0
+		if (params) {
+			if (typeof params.snake_case !== 'undefined')
+				params.snake_case = params.snake_case ? 1 : 0
+		}
 
 		params = Object.assign({}, this.globalParams, params)
 
-		if(this.verbose)
+		if (this.verbose)
 			console.log(`Requesting ${path} with params: `, params)
 
 		return request({
@@ -27,7 +29,7 @@ module.exports = {
 
 	//JSON request function
 	reqJSON(path, body) {
-		if(this.verbose)
+		if (this.verbose)
 			console.log(`Requesting ${path} with body: `, body)
 
 		return request({
@@ -41,7 +43,7 @@ module.exports = {
 	//proper Upper Case for strings
 	firstCapital(string) {
 		let split = string.split(' '), words = []
-		for(const item of split)
+		for (const item of split)
 			words.push(item[0].toUpperCase() + item.substring(1).toLowerCase())
 		return words.join(' ')
 	},
@@ -65,7 +67,7 @@ module.exports = {
 
 	//XIVAPI expects numbers more than 10 digits long as strings. we account for that here
 	sanitizeInt(i) {
-		if(i < 10000000000)
+		if (i < 10000000000)
 			return i
 		else
 			return i.toString()
@@ -89,14 +91,14 @@ module.exports = {
 				if (properties.includes(k)) {
 					obj[k] = this.endpoint + obj[k]
 				}
-				if (obj[k] && typeof(obj[k]) === 'object') {
+				if (obj[k] && typeof (obj[k]) === 'object') {
 					deepClean(obj[k])
 				}
 			})
 		}
 
-		if(!deep) {
-			if(Array.isArray(input))
+		if (!deep) {
+			if (Array.isArray(input))
 				for (let i = 0; i < input.length; i++)
 					input[i] = clean(input[i])
 			else
@@ -110,7 +112,7 @@ module.exports = {
 
 	//get right name based on snake_case
 	correctCase(string, snake_case) {
-		if(snake_case)//snake case
+		if (snake_case)//snake case
 			return string
 
 		//special exceptions
@@ -128,12 +130,12 @@ module.exports = {
 
 	//handle both comma-separated strings, and string arrays, for CSV params
 	makeCSV(x) {
-		if(typeof(x) === 'undefined')
+		if (typeof (x) === 'undefined')
 			return
 
-		if(Array.isArray(x))
+		if (Array.isArray(x))
 			return x.join(',')
-		if(typeof(x) === 'string')
+		if (typeof (x) === 'string')
 			return x
 	},
 
